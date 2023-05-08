@@ -1,4 +1,22 @@
+mode con cols=20 lines=10 && mode con position=1 1
 @echo off
+REM 检查是否以管理员权限运行脚本
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+if '%errorlevel%' NEQ '0' (
+  echo Requesting administrative privileges...
+  goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+  echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+  echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
+  "%temp%\getadmin.vbs"
+  exit /B
+
+:gotAdmin
+  pushd "%CD%"
+  CD /D "%~dp0"
+
 chcp 65001
 setlocal EnableDelayedExpansion
 
