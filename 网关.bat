@@ -32,8 +32,8 @@ if "!choice!"=="1" (
   goto menu
 ) else if "!choice!"=="2" (
   echo 正在切换到静态IP...
-  netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 !gateway_ip_2! 1
-  netsh interface ip set dns %adapter_name% static %dns_server%
+  netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 !gateway_ip_2! 1 >nul 2>&1
+  netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
   pause
   goto menu
 ) else if "!choice!"=="3" (
@@ -43,14 +43,14 @@ if "!choice!"=="1" (
   set /p gateway_choice=输入选项：
   if "!gateway_choice!"=="1" (
     echo 正在切换到网关 %gateway_ip_1%...
-    netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_1% 1
-    netsh interface ip set dns %adapter_name% static %dns_server%
+    netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_1% 1 >nul 2>&1
+    netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
     pause
     goto menu
   ) else if "!gateway_choice!"=="2" (
     echo 正在切换到网关 %gateway_ip_2%...
-    netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_2% 1
-    netsh interface ip set dns %adapter_name% static %dns_server%
+    netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_2% 1 >nul 2>&1
+    netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
     pause
     goto menu
   ) else (
