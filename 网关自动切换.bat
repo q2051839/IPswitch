@@ -28,7 +28,7 @@ if %is_process_running%==1 (
         ping -n 4 127.0.0.1 > nul
         if %is_process_running%==1 (
             netsh interface ip set address %adapter_name% dhcp
-            netsh interface ip set dns %adapter_name% dhcp
+            netsh interface ip set dns %adapter_name% dhcp 2>NUL
             set current_config=DHCP
             echo 已切换到动态IP
         )
@@ -37,8 +37,8 @@ if %is_process_running%==1 (
     REM 进程不存在，切换到静态IP
     if NOT "%current_config%"=="Static" (
         echo 正在切换到静态IP...
-        netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_2% 1
-        netsh interface ip set dns %adapter_name% static %dns_server%
+        netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_2% 1 >nul 2>&1
+        netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
         set current_config=Static
         echo 已切换到静态IP
     )
