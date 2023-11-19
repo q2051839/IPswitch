@@ -4,9 +4,8 @@ setlocal EnableDelayedExpansion
 
 REM 设置网络适配器名称和 IPv4 地址
 set adapter_name="以太网"
-set dhcp_ip=0.0.0.0
 set static_ip=192.168.1.100
-set gateway_ip_1=192.168.1.1
+set gateway_ip_1=192.168.1.2
 set gateway_ip_2=192.168.1.18
 set dns_server=192.168.1.18
 
@@ -28,12 +27,18 @@ if "!choice!"=="1" (
   echo 正在切换到动态IP...
   netsh interface ip set address %adapter_name% dhcp
   netsh interface ip set dns %adapter_name% dhcp
+  echo 重启网络适配器...
+  netsh interface set interface %adapter_name% disable >nul 2>&1
+  netsh interface set interface %adapter_name% enable >nul 2>&1
   pause
   goto menu
 ) else if "!choice!"=="2" (
   echo 正在切换到静态IP...
   netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 !gateway_ip_2! 1 >nul 2>&1
   netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
+  echo 重启网络适配器...
+  netsh interface set interface %adapter_name% disable >nul 2>&1
+  netsh interface set interface %adapter_name% enable >nul 2>&1
   pause
   goto menu
 ) else if "!choice!"=="3" (
@@ -43,14 +48,20 @@ if "!choice!"=="1" (
   set /p gateway_choice=输入选项：
   if "!gateway_choice!"=="1" (
     echo 正在切换到网关 %gateway_ip_1%...
-    netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_1% 1 >nul 2>&1
-    netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
+    netsh interface ip set address %adapter_name% dhcp
+    netsh interface ip set dns %adapter_name% dhcp
+    echo 重启网络适配器...
+    netsh interface set interface %adapter_name% disable >nul 2>&1
+    netsh interface set interface %adapter_name% enable >nul 2>&1
     pause
     goto menu
   ) else if "!gateway_choice!"=="2" (
     echo 正在切换到网关 %gateway_ip_2%...
     netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_2% 1 >nul 2>&1
     netsh interface ip set dns %adapter_name% static %dns_server% >nul 2>&1
+    echo 重启网络适配器...
+    netsh interface set interface %adapter_name% disable >nul 2>&1
+    netsh interface set interface %adapter_name% enable >nul 2>&1
     pause
     goto menu
   ) else (
