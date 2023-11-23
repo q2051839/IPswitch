@@ -1,5 +1,15 @@
 @echo off
 chcp 65001
+
+REM 检测管理员权限
+>nul 2>&1 net session
+if %errorLevel% neq 0 (
+  echo 请以管理员身份运行此脚本！
+  echo 请按任意键退出...
+  pause>nul
+  exit /b
+)
+
 setlocal EnableDelayedExpansion
 
 REM 设置网络适配器名称和 IPv4 地址
