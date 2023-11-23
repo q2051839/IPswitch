@@ -18,8 +18,9 @@ echo.
 echo 请选择要使用的网络配置：
 echo [1] DHCP
 echo [2] 静态IP
-echo [3] 切换网关
-echo [4] 退出脚本
+echo [3] 本地ADG
+echo [4] 切换网关
+echo [5] 退出脚本
 
 set /p choice=输入选项：
 
@@ -42,6 +43,15 @@ if "!choice!"=="1" (
   pause
   goto menu
 ) else if "!choice!"=="3" (
+  echo 正在切换到本地ADG...
+  netsh interface ip set address %adapter_name% static %static_ip% 255.255.255.0 %gateway_ip_1% 1 >nul 2>&1
+  netsh interface ip set dns %adapter_name% static 127.0.0.1 >nul 2>&1
+  echo 重启网络适配器...
+  netsh interface set interface %adapter_name% disable >nul 2>&1
+  netsh interface set interface %adapter_name% enable >nul 2>&1
+  pause
+  goto menu
+) else if "!choice!"=="4" (
   echo 请选择要使用的网关：
   echo [1] %gateway_ip_1%
   echo [2] %gateway_ip_2%
@@ -69,7 +79,7 @@ if "!choice!"=="1" (
     pause
     goto menu
   )
-) else if "!choice!"=="4" (
+) else if "!choice!"=="5" (
   exit
 ) else (
   echo 无效的选择。请重新输入。
